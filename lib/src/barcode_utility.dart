@@ -152,11 +152,21 @@ WiFi? toWiFi(Map? data) {
   }
 }
 
+Rect? toRect(Map? data) {
+  if (data != null) {
+    return Rect.fromLTRB(
+      (data['left'] as int? ?? 0).toDouble(),
+      (data['top'] as int? ?? 0).toDouble(),
+      (data['right'] as int? ?? 0).toDouble(),
+      (data['bottom'] as int? ?? 0).toDouble(),
+    );
+  } else {
+    return null;
+  }
+}
+
 Size applyBoxFit(BoxFit fit, Size input, Size output) {
-  if (input.height <= 0.0 ||
-      input.width <= 0.0 ||
-      output.height <= 0.0 ||
-      output.width <= 0.0) {
+  if (input.height <= 0.0 || input.width <= 0.0 || output.height <= 0.0 || output.width <= 0.0) {
     return Size.zero;
   }
 

@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Size
 import android.view.Surface
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -91,13 +92,20 @@ class MobileScanner(
                 if (barcodeMap.isNotEmpty()) {
                     if (returnImage) {
 
-                        val bitmap = Bitmap.createBitmap(mediaImage.width, mediaImage.height, Bitmap.Config.ARGB_8888)
+                        val bitmap = Bitmap.createBitmap(
+                            mediaImage.width,
+                            mediaImage.height,
+                            Bitmap.Config.ARGB_8888
+                        )
 
                         val imageFormat = YuvToRgbConverter(activity.applicationContext)
 
                         imageFormat.yuvToRgb(mediaImage, bitmap)
 
-                        val bmResult = rotateBitmap(bitmap, camera?.cameraInfo?.sensorRotationDegrees?.toFloat() ?: 90f)
+                        val bmResult = rotateBitmap(
+                            bitmap,
+                            camera?.cameraInfo?.sensorRotationDegrees?.toFloat() ?: 90f
+                        )
 
                         val stream = ByteArrayOutputStream()
                         bmResult.compress(Bitmap.CompressFormat.PNG, 100, stream)
@@ -117,8 +125,8 @@ class MobileScanner(
                         mobileScannerCallback(
                             barcodeMap,
                             null,
-                            null,
-                            null
+                            inputImage.width,
+                            inputImage.height,
                         )
                     }
                 }
@@ -229,7 +237,8 @@ class MobileScanner(
             // Build the analyzer to be passed on to MLKit
             val analysisBuilder = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-//                analysisBuilder.setTargetResolution(Size(1440, 1920))
+            //更新分辨率
+            analysisBuilder.setTargetResolution(Size(720, 1280))
             val analysis = analysisBuilder.build().apply { setAnalyzer(executor, captureOutput) }
 
             camera = cameraProvider!!.bindToLifecycle(
@@ -270,6 +279,7 @@ class MobileScanner(
         }, executor)
 
     }
+
     /**
      * Stop barcode scanning.
      */

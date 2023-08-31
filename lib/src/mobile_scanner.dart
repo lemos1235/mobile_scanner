@@ -270,6 +270,7 @@ class _MobileScannerState extends State<MobileScanner>
         if (widget.overlay != null) {
           return Stack(
             alignment: Alignment.center,
+            fit: StackFit.expand,
             children: [
               _scanner(value.size, value.webId, value.textureId),
               widget.overlay!,

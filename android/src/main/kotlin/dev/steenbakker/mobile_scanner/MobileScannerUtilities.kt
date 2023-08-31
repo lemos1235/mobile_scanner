@@ -26,10 +26,21 @@ fun Image.toByteArray(): ByteArray {
     return out.toByteArray()
 }
 
+private fun getBoundingPoints(rect: Rect?): Map<String?, Int?>? {
+    val frame: MutableMap<String?, Int?> = HashMap()
+    if (rect == null) return frame
+    frame["left"] = rect.left
+    frame["right"] = rect.right
+    frame["top"] = rect.top
+    frame["bottom"] = rect.bottom
+    return frame
+}
+
 val Barcode.data: Map<String, Any?>
     get() = mapOf(
         "corners" to cornerPoints?.map { corner -> corner.data }, "format" to format,
         "rawBytes" to rawBytes, "rawValue" to rawValue, "type" to valueType,
+        "boundingBox" to getBoundingPoints(boundingBox),
         "calendarEvent" to calendarEvent?.data, "contactInfo" to contactInfo?.data,
         "driverLicense" to driverLicense?.data, "email" to email?.data,
         "geoPoint" to geoPoint?.data, "phone" to phone?.data, "sms" to sms?.data,

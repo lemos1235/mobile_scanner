@@ -12,6 +12,11 @@ class Barcode {
   /// Returns null if the corner points can not be determined.
   final List<Offset>? corners;
 
+  /// The rectangle that holds the discovered barcode relative to the detected image in the view coordinate system.
+  ///
+  /// Could be null if the bounding rectangle can not be determined.
+  final Rect? boundingBox;
+
   /// Returns barcode format
   final BarcodeFormat format;
 
@@ -74,6 +79,7 @@ class Barcode {
 
   Barcode({
     this.corners,
+    this.boundingBox,
     this.format = BarcodeFormat.ean13,
     this.rawBytes,
     this.type = BarcodeType.text,
@@ -95,6 +101,7 @@ class Barcode {
       : corners = toCorners(
           (data['corners'] as List?)?.cast<Map<Object?, Object?>>(),
         ),
+        boundingBox = toRect(data['boundingBox'] as Map?),
         format = toFormat(data['format'] as int),
         rawBytes = data['rawBytes'] as Uint8List?,
         rawValue = data['rawValue'] as String?,
