@@ -9,7 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Size
 import android.view.Surface
-import androidx.camera.core.*
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -232,13 +237,13 @@ class MobileScanner(
 
             // Build the preview to be shown on the Flutter texture
             val previewBuilder = Preview.Builder()
+             previewBuilder.setTargetResolution(Size(720, 1280));
             preview = previewBuilder.build().apply { setSurfaceProvider(surfaceProvider) }
 
             // Build the analyzer to be passed on to MLKit
             val analysisBuilder = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            //更新分辨率
-            analysisBuilder.setTargetResolution(Size(720, 1280))
+             analysisBuilder.setTargetResolution(Size(720, 1280))
             val analysis = analysisBuilder.build().apply { setAnalyzer(executor, captureOutput) }
 
             camera = cameraProvider!!.bindToLifecycle(
